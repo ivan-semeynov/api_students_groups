@@ -1,18 +1,18 @@
 <?php
 
 //unfinished
-function groupCreate(int $id, string $group_name,string $type, object $connection) : void{
+function groupCreate(array $data, object $connection){
+
     try{
-
-        $sql = "INSERT INTO Groupp (ID, group_name) VALUES ($id, $group_name,)";
-
-        $affectedRowsNumber = $connection->exec($sql);
-        echo "In Students appended $affectedRowsNumber strings";
+        $stmt = $connection->prepare("INSERT INTO Groupp (group_name, type) VALUES (:group_name, :type)");
+        $stmt->execute(['group_name' => $data['group_name'], 'type' => $data['type']]);
+        return $connection->lastInsertId();
     }
 
     catch(PDOException $e){
         echo "DB error: " . $e->getMessage();
     }
+
 }
 
 
